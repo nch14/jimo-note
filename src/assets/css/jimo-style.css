@@ -1,0 +1,62 @@
+.jimo-info-snap {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 10px;
+  border: solid #eeeeee 1px;
+}
+
+.jimo-info-snap-head {
+  display: flex;
+  height: 50px;
+  align-items: center;
+  /*
+  justify-content: center;
+  */
+}
+
+
+.jimo-info-snap-title {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-family: -apple-system,SF UI Display,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
+  color: #333;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.jimo-info-snap-body {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
+  font-size: 13px;
+  line-height: 24px;
+}
+
+.jimo-info-snap-img {
+  max-width: 48px;
+  border-radius: 48px
+}
+
+.jimo-info-snap-username {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.jimo-info-snap-time {
+
+}
+
+
+.jimo-like-group{
+
+}
+.jimo-like-group-img {
+  max-width: 100%;
+  border-radius: 48px
+}
+
