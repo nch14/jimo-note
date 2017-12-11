@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <el-menu :default-active="index" class="el-menu-demo" mode="horizontal" @select="onNext">
+    <el-menu :default-active="index" v-if="navigationShown" class="el-menu-demo" mode="horizontal" @select="onNext">
       <el-menu-item index="1">即墨Note</el-menu-item>
       <el-menu-item index="2">
         朋友圈
@@ -88,7 +88,11 @@
       // 计算属性的 getter
       hasLogin: function () {
         // `this` 指向 vm 实例
-        return false;
+        return true;
+      },
+      navigationShown() {
+        console.log(this.$store.state);
+        return this.$store.state.headIsShow;
       }
     },
     methods: {
@@ -110,6 +114,8 @@
           case '6':
             this.goSignUp = true;
             return;
+          case '11':
+            next = {name: 'Note'};
         }
         this.$router.push(next);
       },
@@ -127,7 +133,7 @@
 
 <style>
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;

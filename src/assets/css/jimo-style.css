@@ -1,8 +1,16 @@
+body{
+  margin: 0;
+}
 .jimo-info-snap {
   margin-top: 30px;
   margin-bottom: 30px;
   padding: 10px;
   border: solid #eeeeee 1px;
+}
+
+.jimo-info-snap-no-boarder{
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .jimo-info-snap-head {
@@ -59,4 +67,28 @@
   max-width: 100%;
   border-radius: 48px
 }
+
+.jimo-title{
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #969696;
+}
+
+.jimo-name{
+  position: relative;
+  vertical-align: middle;
+  top: 1px;
+  font-size: 14px;
+  color: #333;
+}
+
+.jimo-name-white{
+  position: relative;
+  vertical-align: middle;
+  top: 1px;
+  font-size: 14px;
+  color: white;
+}
+
+
 

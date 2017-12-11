@@ -39,6 +39,10 @@
         }
       }
     },
+    mounted() {
+      document.title = "确认订单";
+      this.$store.commit('showFoot');
+    },
     methods: {
       signIn() {
         console.log('sign in')

@@ -3,6 +3,8 @@ import Router from 'vue-router'
 import Hello from '@/components/Hello'
 import Like from '@/components/Like'
 import HomePage from '@/components/HomePage'
+import Note from '@/components/Note'
+
 Vue.use(Router);
 
 export default new Router({
@@ -21,6 +23,11 @@ export default new Router({
       path: '/home/:id',
       name: 'HomePage',
       component: HomePage
+    },
+    {
+      path: '/note',
+      name: 'Note',
+      component: Note
     }
   ]
 })
