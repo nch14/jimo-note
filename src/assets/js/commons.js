@@ -5,8 +5,8 @@
 import axios from 'axios'
 
 const myAxios = axios.create({
-  baseURL: 'http://v2.manage.chenhaonee.cn',
-  //baseURL: 'http://localhost:8989',
+  //baseURL: 'http://v2.manage.chenhaonee.cn',
+  baseURL: 'http://localhost:3000',
   timeout: 50000,
 });
 myAxios.defaults.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';

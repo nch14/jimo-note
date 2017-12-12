@@ -9,69 +9,32 @@
             </div>
 
             <p class="jimo-name-white">
-              <i class="fa fa-plus fa-fw"></i>添加笔记本
+              <i @click="onNewNotebook" class="fa fa-plus fa-fw"></i>添加笔记本
             </p>
-            <p class="jimo-name-white"><i class="fa fa-book fa-fw"></i>分的积分
-              <a @click="onDeleteNotebook">
-                <i class="fa fa-trash-o area-note-right"></i>
+            <p class="jimo-name-white" v-for="(item,index) in books" :key="index">
+              <a @click="onBookSelect(item.id)"><i class="fa fa-book fa-fw"></i><span>{{item.name}}</span></a>
+              <a @click="onDeleteNotebook(item)">
+                <i class="fa fa-trash-o area-note-right" style="margin: 2px"></i>
               </a>
-              <a @click="onRenameNotebook">
-                <i class="fa fa-gear area-note-right"></i>
-              </a></p>
-            <p class="jimo-name-white"><i class="fa fa-book fa-fw"></i>分的积分
-              <a @click="onDeleteNotebook">
-                <i class="fa fa-trash-o area-note-right"></i>
+              <a @click="onRenameNotebook(item)">
+                <i class="fa fa-gear area-note-right" style="margin: 2px"></i>
               </a>
-              <a @click="onRenameNotebook">
-                <i class="fa fa-gear area-note-right"></i>
-              </a></p>
-            <p class="jimo-name-white"><i class="fa fa-book fa-fw"></i>分的积分</p>
-            <p class="jimo-name-white"><i class="fa fa-book fa-fw"></i>分的积分</p>
-            <p class="jimo-name-white"><i class="fa fa-book fa-fw"></i>分的积分</p>
-            <p class="jimo-name-white"><i class="fa fa-book fa-fw"></i>分的积分</p>
-
+            </p>
           </div>
 
         </div>
         <div class="col-md-2" style="padding-left: 0; padding-right: 0">
 
-          <div @click="onNewNote" class="add-button">
+          <div @click="newNote" class="add-button">
             <a><i class="fa fa-plus-circle fa-fw"></i><span>添加笔记</span></a>
           </div>
 
-          <div class="note-item-title">
+          <div class="note-item-title" v-for="(item,index) in notes" :key="index">
             <div>
               <a><i class="fa fa-sticky-note-o fa-2x"></i></a>
             </div>
-            <div class="note-item-title-text">
-              <span>为新中国加油！</span>
-            </div>
-          </div>
-
-          <div class="note-item-title">
-            <div>
-              <a><i class="fa fa-sticky-note-o fa-2x"></i></a>
-            </div>
-            <div class="note-item-title-text">
-              <span>为中国梦点赞！</span>
-            </div>
-          </div>
-
-          <div class="note-item-title">
-            <div>
-              <a><i class="fa fa-sticky-note-o fa-2x"></i></a>
-            </div>
-            <div class="note-item-title-text">
-              <span>渣渣！束手就擒吧！</span>
-            </div>
-          </div>
-
-          <div class="note-item-title">
-            <div>
-              <a><i class="fa fa-sticky-note-o fa-2x"></i></a>
-            </div>
-            <div class="note-item-title-text">
-              <span>为新中国擒住具备</span>
+            <div @click="onNoteSelect(item)" class="note-item-title-text">
+              <span>{{ item.title }}</span>
             </div>
           </div>
         </div>
@@ -91,22 +54,24 @@
                   <i class="fa fa-folder-open note-control-butoon"></i>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="权限设置" placement="top">
-                  <i class="fa fa-lock note-control-butoon"></i>
+                  <i @click="stateDialog =true" class="fa fa-lock note-control-butoon"></i>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="删除文章" placement="top">
-                  <i class="fa fa-trash-o note-control-butoon"></i>
+                  <i @click="onDeleteNote" class="fa fa-trash-o note-control-butoon"></i>
                 </el-tooltip>
 
                 <div style="float: right">
                   <el-tooltip class="item" effect="dark" content="保存" placement="top">
-                    <i class="fa fa fa-floppy-o note-control-butoon"></i>
+                    <i @click="onNoteUpdateSave" class="fa fa fa-floppy-o note-control-butoon"></i>
                   </el-tooltip>
 
 
-                  <i class="fa fa fa-mail-forward note-control-butoon"><span>发布文章</span></i>
+                  <i v-if="note.noteId" @click="onNoteReleaseSave"
+                     class="fa fa fa-mail-forward note-control-butoon"><span>更新文章</span></i>
+                  <i v-else @click="onNewNote" class="fa fa fa-mail-forward note-control-butoon"><span>发布文章</span></i>
                 </div>
               </div>
-              <textarea class="write-area-md" :value="note.input" @input="update"></textarea>
+              <textarea class="write-area-md" :value="note.content" @input="update"></textarea>
             </div>
 
             <div class="show-area" v-html="compiledMarkdown"></div>
@@ -114,6 +79,16 @@
         </div>
       </div>
     </div>
+
+    <el-dialog
+      title="权限设置"
+      :visible.sync="stateDialog"
+      width="30%">
+      <el-radio v-model="note.state" label="1">私有</el-radio>
+      <el-radio v-model="note.state" label="2">公开</el-radio>
+      <span slot="footer" class="dialog-footer">
+  </span>
+    </el-dialog>
 
   </div>
 </template>
@@ -138,14 +113,22 @@
         },
         note: {
           title: '',
-          input: '',
-        }
+          content: '',
+          state: 1
+        },
+        currentBookId: '',
+        books: [],
+        notes: [],
+        newBook: {
+          name: '新书',
+        },
 
+        stateDialog: false,
       }
     },
-    watch: {
-      //'title': 'onTitleUpdate',
-    },
+    /* watch: {
+       'note.stateProxy': 'stateParse',
+     },*/
     mounted() {
       document.title = "记笔记";
       this.$store.commit('hideFoot');
@@ -153,29 +136,141 @@
     computed: {
       compiledMarkdown: function () {
         let showTitle = (this.note.title == '') ? '' : '# ' + this.note.title + '\n';
-        return marked(showTitle + this.note.input, {sanitize: true})
+        return marked(showTitle + this.note.content, {sanitize: true})
       }
+    },
+    created() {
+      this.loadBookInfo();
     },
     methods: {
       onBack() {
         this.$router.push({name: 'Hello'})
       },
-      onConfigNotebook(item) {
-        this.noteBookConfig = {
-          configModel: true,
-          id: 0
-        }
+      loadBookInfo() {
+        let id = this.$store.state.userId;
+        this.$http.get(`/users/${id}/book`)
+          .then(res => {
+            if (res.data.code == 200) {
+              this.books = res.data.data;
+            } else {
+              this.$message.error('好像出错了');
+            }
+          })
+          .catch(err => {
+            this.$message.error('好像出错了');
+            console.log(err)
+          })
       },
-      onDeleteNotebook() {
-        this.$confirm('此操作将永久删除该笔记本, 是否继续?', '删除笔记本', {
+      onBookSelect(id) {
+        console.log('onBookSelect');
+        this.currentBookId = id;
+        let userId = this.$store.state.userId;
+        this.$http.get(`/users/${userId}/book/${id}`)
+          .then(res => {
+            this.notes = res.data.data;
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      onNewNotebook() {
+        this.$prompt('新笔记本名', '新建笔记本', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(({value}) => {
+
+          let userId = this.$store.state.userId;
+          let book = {
+            name: value,
+            userId: userId
+          };
+
+          this.$http.post(`/users/${userId}/book`, book)
+            .then(res => {
+              this.books.push({
+                id: res.data.data,
+                name: value,
+                userId: userId
+              });
+              this.$message({
+                type: 'success',
+                message: '新建成功'
+              });
+            })
+            .catch(err => {
+              this.$message.error('好像出问题了');
+            });
+        }).catch(() => {
+          this.$message.error('好像出问题了');
+        });
+
+
+      },
+      onNoteSelect(item) {
+        this.note = item;
+        this.note.state = "" + item.state;
+      },
+      newNote() {
+        let userId = this.$store.state.userId;
+        this.note = {
+          title: '',
+          content: '',
+          userId: userId,
+          bookId: this.currentBookId
+        };
+      },
+      onNewNote() {
+        let userId = this.$store.state.userId;
+        this.note.bookId = this.currentBookId;
+        this.note.userId = userId;
+        this.note.state = parseInt(this.note.state);
+
+        this.$http.post(`/users/${userId}/note`, this.note)
+          .then(res => {
+            if (res.data.code == 200) {
+              this.$message('发布成功');
+              this.note.noteId = res.data.data;
+              console.log(this.note)
+              this.notes.push(this.note);
+            }
+            else
+              this.$message.error('好像出问题了');
+          })
+          .catch(err => {
+            this.$message.error('好像出问题了');
+          })
+      },
+      onDeleteNote() {
+        console.log('onDeleteNote')
+        let userId = this.$store.state.userId;
+        let noteId = this.note.noteId;
+        this.$confirm('此操作将永久删除该笔记, 是否继续?', '删除笔记', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          this.$http.delete(`/users/${userId}/note/${noteId}`)
+            .then(res => {
+              if (res.data.code == 200) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                this.notes.splice(this.notes.findIndex(item => item.noteId === this.note.noteId), 1);
+                this.newNote();
+              } else {
+                this.$message({
+                  type: 'info',
+                  message: '删除失败'
+                });
+              }
+            })
+            .catch(err => {
+              this.$message({
+                type: 'info',
+                message: '删除失败'
+              });
+            });
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -183,31 +278,91 @@
           });
         });
       },
-
-      onRenameNotebook() {
+      onNoteUpdateSave() {
+        let userId = this.$store.state.userId;
+        let noteId = this.note.noteId;
+        this.note.state = parseInt(this.note.state);
+        this.$http.put(`/users/${userId}/note/${noteId}/stash`, this.note)
+          .then(res => {
+            if (res.data.code == 200)
+              this.$message('保存成功');
+            else
+              this.$message.error('好像出问题了');
+          })
+          .catch(err => {
+            this.$message.error('好像出问题了');
+          })
+      },
+      onNoteReleaseSave() {
+        let userId = this.$store.state.userId;
+        let noteId = this.note.noteId;
+        this.note.state = parseInt(this.note.state);
+        this.$http.put(`/users/${userId}/note/${noteId}`, this.note)
+          .then(res => {
+            if (res.data.code == 200)
+              this.$message('保存成功');
+            else
+              this.$message.error('好像出问题了');
+          })
+          .catch(err => {
+            this.$message.error('好像出问题了');
+          })
+      },
+      onDeleteNotebook(item) {
+        this.$confirm('此操作将永久删除该笔记本, 是否继续?', '删除笔记本', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let userId = this.$store.state.userId;
+          debugger
+          this.$http.delete(`/users/${userId}/book/${item.id}`)
+            .then(res => {
+              if (res.data.code == 200)
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+              else
+                this.$message.error('好像出问题了');
+            })
+            .catch(err => {
+              this.$message.error('好像出问题了');
+            });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      onRenameNotebook(item) {
+        console.log(item)
         this.$prompt('新笔记本名', '修改笔记本名', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
         }).then(({value}) => {
-          this.$message({
-            type: 'success',
-            message: '该笔记本已更名为: ' + value
-          });
+          item.name = value;
+          let userId = this.$store.state.userId;
+          this.$http.put(`/users/${userId}/book/${item.id}`, item)
+            .then(res => {
+              if (res.data.code == 200)
+                this.$message({
+                  type: 'success',
+                  message: '该笔记本已更名为: ' + value
+                });
+              else
+                this.$message.error('好像出问题了');
+            })
+            .catch(err => {
+              this.$message.error('好像出问题了');
+            });
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });
+          this.$message.error('好像出问题了');
         });
       },
-      onNewNote() {
-        this.note = {
-          title: '',
-          input: ''
-        }
-      },
       update: _.debounce(function (e) {
-        this.note.input = e.target.value
+        this.note.content = e.target.value
       }, 300)
     }
   }
@@ -306,6 +461,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border-bottom: 1px solid #d9d9d9;
   }
 
   .note-item-title {
@@ -314,6 +470,7 @@
     align-items: center;
     padding-left: 20px;
     padding-right: 20px;
+    border-bottom: 1px solid #d9d9d9;
   }
 
   .note-item-title-text {

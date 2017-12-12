@@ -4,6 +4,7 @@ import Hello from '@/components/Hello'
 import Like from '@/components/Like'
 import HomePage from '@/components/HomePage'
 import Note from '@/components/Note'
+import Page from '@/components/Page'
 
 Vue.use(Router);
 
@@ -25,9 +26,14 @@ export default new Router({
       component: HomePage
     },
     {
-      path: '/note',
+      path: '/note/:id',
       name: 'Note',
       component: Note
+    },
+    {
+      path: '/page/:id',
+      name: 'Page',
+      component: Page
     }
   ]
 })
