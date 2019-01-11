@@ -59,6 +59,9 @@
                 <el-tooltip class="item" effect="dark" content="删除文章" placement="top">
                   <i @click="onDeleteNote" class="fa fa-trash-o note-control-butoon"></i>
                 </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="导出文章" placement="top">
+                  <i @click="onExport" class="fa fa-cloud-download note-control-butoon"></i>
+                </el-tooltip>
 
                 <div style="float: right">
                   <el-tooltip class="item" effect="dark" content="保存" placement="top">
@@ -239,6 +242,24 @@
           .catch(err => {
             this.$message.error('好像出问题了');
           })
+      },
+      onExport(){
+        let content = this.compiledMarkdown;
+
+        this.$http.post(`/export`,{content:content})
+          .then(res => {
+            if (res.data.code == 200) {
+             this.$message('导出成功');
+            } else {
+
+            }
+          })
+          .catch(err => {
+            this.$message({
+              type: 'info',
+              message: '导出失败'
+            });
+          });
       },
       onDeleteNote() {
         console.log('onDeleteNote')

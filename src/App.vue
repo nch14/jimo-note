@@ -5,21 +5,25 @@
       <el-menu-item index="2">
         朋友圈
       </el-menu-item>
-      <el-menu-item index="3">
-        我的笔记
-      </el-menu-item>
-      <el-menu-item index="4">
-        我的关注
-      </el-menu-item>
 
       <span v-if="!hasLogin" style="float: right">
         <el-menu-item index="5" @click="goSignIn = true">登录</el-menu-item>
         <el-menu-item index="6" @click="goSignUp = true">注册</el-menu-item>
       </span>
 
-      <span v-else style="float: right">
-        <el-menu-item index="10">{{ nickName}}</el-menu-item>
+      <span v-else>
+
+          <el-menu-item index="3">
+        我的笔记
+      </el-menu-item>
+      <el-menu-item index="4">
+        我的关注
+      </el-menu-item>
+        <span style="float: right">
+            <el-menu-item index="10">{{ nickName}}</el-menu-item>
         <el-menu-item index="11">记笔记</el-menu-item>
+        </span>
+
       </span>
 
     </el-menu>

@@ -68,13 +68,11 @@
     },
     computed: {
       myTitle() {
-        return this.$store.getters.getMyTile;
+        return 'title';
       }
     },
     created() {
-      this.username = this.$store.state.userInfo.nickName;
-      this.loadBookInfo();
-      this.loadNoteInfo();
+
     },
     methods: {
       loadBookInfo() {

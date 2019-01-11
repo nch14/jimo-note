@@ -46,8 +46,17 @@
         this.$router.push({name: 'Page', params: {id: id}})
       },
       loadNoteInfo() {
-        let id = this.$store.state.userId;
-        this.$http.get(`/users/${id}/note/zone`)
+        let hasLogin = this.$store.state.hasLogin;
+        let url;
+        debugger
+        if (hasLogin) {
+          let id = this.$store.state.userId;
+          url = `/users/${id}/note/zone`
+        } else {
+          url = '/note/zone'
+        }
+
+        this.$http.get(url)
           .then(res => {
             if (res.data.code == 200) {
               this.notes = res.data.data;
